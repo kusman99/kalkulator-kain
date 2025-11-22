@@ -3,16 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kalkulator Kain (Kg ke Meter)</title>
+  <title>Kalkulator Kain (Kg ⇄ Yard/Meter)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
       background: #f5f5f5;
     }
-    .container {
-      max-width: 400px;
-      margin: auto;
+    .wrapper {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .card {
+      width: 380px;
       background: #fff;
       padding: 20px;
       border-radius: 12px;
@@ -46,28 +51,53 @@
       background: #e9ecef;
       border-radius: 8px;
       text-align: center;
+      min-height: 70px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Kalkulator Kain</h2>
-    <label for="kg">Qty (kg):</label>
-    <input type="number" id="kg" value="1">
+  <div class="wrapper">
 
-    <label for="lebar">Lebar dalam setting open (inch):</label>
-    <input type="number" id="lebar" value="72">
+    <!-- CARD 1: KG → METER/YARD -->
+    <div class="card">
+      <h2>Kg ➜ Yard & Meter</h2>
+      <label>Qty (kg):</label>
+      <input type="number" id="kg" value="1">
 
-    <label for="gramasi">Gramasi (gsm):</label>
-    <input type="number" id="gramasi" value="230">
+      <label>Lebar dalam setting open (inch):</label>
+      <input type="number" id="lebar" value="72">
 
-    <button onclick="hitung()">Hitung</button>
+      <label>Gramasi (gsm):</label>
+      <input type="number" id="gramasi" value="230">
 
-    <div class="result" id="hasil"></div>
+      <button onclick="hitungKG()">Hitung</button>
+      <div class="result" id="hasilKG"></div>
+    </div>
+
+    <!-- CARD 2: YARD/METER → KG -->
+    <div class="card">
+      <h2>Yard/Meter ➜ Kg</h2>
+
+      <label>Masukkan Yard:</label>
+      <input type="number" id="yard2" placeholder="Opsional">
+
+      <label>Masukkan Meter:</label>
+      <input type="number" id="meter2" placeholder="Opsional">
+
+      <label>Lebar dalam setting open (inch):</label>
+      <input type="number" id="lebar2" value="72">
+
+      <label>Gramasi (gsm):</label>
+      <input type="number" id="gramasi2" value="230">
+
+      <button onclick="hitungKG2()">Hitung</button>
+      <div class="result" id="hasilKG2"></div>
+    </div>
+
   </div>
 
   <script>
-    function hitung() {
+    function hitungKG() {
       const kg = parseFloat(document.getElementById('kg').value);
       const lebar = parseFloat(document.getElementById('lebar').value);
       const gramasi = parseFloat(document.getElementById('gramasi').value);
@@ -75,14 +105,32 @@
       if (kg > 0 && lebar > 0 && gramasi > 0) {
         const yard = (kg * 43055.55) / (lebar * gramasi);
         const meter = yard * 0.9144;
-        document.getElementById('hasil').innerHTML = `
-          <strong>Hasil:</strong><br>
-          ${yard.toFixed(2)} yard<br>
-          ${meter.toFixed(2)} meter
-        `;
+        document.getElementById('hasilKG').innerHTML =
+          `<strong>Hasil:</strong><br>${yard.toFixed(2)} yard<br>${meter.toFixed(2)} meter`;
       } else {
-        document.getElementById('hasil').innerText = 'Mohon isi semua nilai dengan benar.';
+        document.getElementById('hasilKG').innerText = 'Mohon isi semua nilai dengan benar.';
       }
+    }
+
+    function hitungKG2() {
+      let yard = parseFloat(document.getElementById('yard2').value);
+      let meter = parseFloat(document.getElementById('meter2').value);
+      const lebar = parseFloat(document.getElementById('lebar2').value);
+      const gramasi = parseFloat(document.getElementById('gramasi2').value);
+
+      if (!yard && meter) {
+        yard = meter / 0.9144;
+      }
+
+      if (!yard || yard <= 0 || lebar <= 0 || gramasi <= 0) {
+        document.getElementById('hasilKG2').innerText = 'Isi yard atau meter dengan benar.';
+        return;
+      }
+
+      const kg = (yard * lebar * gramasi) / 43055.55;
+
+      document.getElementById('hasilKG2').innerHTML =
+        `<strong>Estimasi Berat:</strong><br>${kg.toFixed(2)} kg`;
     }
   </script>
 </body>
