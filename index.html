@@ -15,6 +15,7 @@
       gap: 20px;
       flex-wrap: wrap;
       justify-content: center;
+      align-items: stretch; /* card selalu sama tinggi */
     }
     .card {
       width: 380px;
@@ -22,6 +23,8 @@
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
     }
     label {
       display: block;
@@ -36,7 +39,7 @@
     }
     button {
       width: 100%;
-      margin-top: 15px;
+      margin-top: auto; /* tombol tetap paling bawah */
       padding: 12px;
       background: #28a745;
       color: white;
@@ -56,11 +59,13 @@
   </style>
 </head>
 <body>
+
   <div class="wrapper">
 
-    <!-- CARD 1: KG → METER/YARD -->
+    <!-- ===================== CARD 1 ===================== -->
     <div class="card">
       <h2>Kg ➜ Yard & Meter</h2>
+
       <label>Qty (kg):</label>
       <input type="number" id="kg" value="1">
 
@@ -74,7 +79,7 @@
       <div class="result" id="hasilKG"></div>
     </div>
 
-    <!-- CARD 2: YARD/METER → KG -->
+    <!-- ===================== CARD 2 ===================== -->
     <div class="card">
       <h2>Yard/Meter ➜ Kg</h2>
 
@@ -105,10 +110,12 @@
       if (kg > 0 && lebar > 0 && gramasi > 0) {
         const yard = (kg * 43055.55) / (lebar * gramasi);
         const meter = yard * 0.9144;
+
         document.getElementById('hasilKG').innerHTML =
           `<strong>Hasil:</strong><br>${yard.toFixed(2)} yard<br>${meter.toFixed(2)} meter`;
       } else {
-        document.getElementById('hasilKG').innerText = 'Mohon isi semua nilai dengan benar.';
+        document.getElementById('hasilKG').innerText =
+          'Mohon isi semua nilai dengan benar.';
       }
     }
 
@@ -118,12 +125,14 @@
       const lebar = parseFloat(document.getElementById('lebar2').value);
       const gramasi = parseFloat(document.getElementById('gramasi2').value);
 
+      // Jika user hanya isi meter
       if (!yard && meter) {
         yard = meter / 0.9144;
       }
 
       if (!yard || yard <= 0 || lebar <= 0 || gramasi <= 0) {
-        document.getElementById('hasilKG2').innerText = 'Isi yard atau meter dengan benar.';
+        document.getElementById('hasilKG2').innerText =
+          'Isi yard atau meter dengan benar.';
         return;
       }
 
@@ -133,5 +142,6 @@
         `<strong>Estimasi Berat:</strong><br>${kg.toFixed(2)} kg`;
     }
   </script>
+
 </body>
 </html>
